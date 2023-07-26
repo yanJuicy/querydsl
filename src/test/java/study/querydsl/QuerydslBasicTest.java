@@ -3,6 +3,7 @@ package study.querydsl;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -410,5 +411,26 @@ public class QuerydslBasicTest {
 		for (String s : result) {
 			System.out.println("s = " + s);
 		}
+	}
+
+	@Test
+	public void constant() {
+		Tuple result = queryFactory
+				.select(member.username, Expressions.constant("A"))
+				.from(member)
+				.fetchFirst();
+
+		System.out.println("result = " + result);
+	}
+
+	@Test
+	public void concat() {
+		String result = queryFactory
+				.select(member.username.concat("_").concat(member.age.stringValue()))
+				.from(member)
+				.where(member.username.eq("member1"))
+				.fetchOne();
+
+		System.out.println("result = " + result);
 	}
 }
